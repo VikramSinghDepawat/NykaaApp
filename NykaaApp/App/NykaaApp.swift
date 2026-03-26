@@ -9,9 +9,18 @@ import SwiftUI
 
 @main
 struct NykaaApp: App {
+    @StateObject var coordinator = AppCoordinator()
+    @StateObject var appState = AppState()
+    @StateObject var cartManager = CartManager()
+    @StateObject var wishlistManager = WishlistManager()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootView()
+                .environmentObject(coordinator)
+                .environmentObject(appState)
+                .environmentObject(cartManager)
+                .environmentObject(wishlistManager)
         }
     }
 }
