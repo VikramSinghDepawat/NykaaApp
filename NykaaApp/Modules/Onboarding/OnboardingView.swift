@@ -8,8 +8,17 @@
 import SwiftUI
 
 struct OnboardingView: View {
+    @EnvironmentObject private var coordinator: AppCoordinator
+    @EnvironmentObject private var appState: AppState
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            Text("Wellcome to Nykaa Fashion")
+            Button("Get Started") {
+                appState.hasSeenOnboarding.toggle()
+                coordinator.push(.login)
+            }
+        }
     }
 }
 

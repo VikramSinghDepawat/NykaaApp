@@ -8,8 +8,24 @@
 import SwiftUI
 
 struct SplashView: View {
+    @EnvironmentObject var appState: AppState
+    @EnvironmentObject var coordinator: AppCoordinator
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Text("Nykaa")
+            .font(.largeTitle)
+            .bold()
+            .onAppear {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    if !appState.hasSeenOnboarding {
+                        coordinator.push(.onboarding)
+                    } else if !appState.isLoggedIn {
+                        coordinator.push(.login)
+                    } else {
+                        coordinator.push(.home)
+                    }
+                }
+            }
     }
 }
 

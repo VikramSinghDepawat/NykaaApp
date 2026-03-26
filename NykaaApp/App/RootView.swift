@@ -15,12 +15,30 @@ struct RootView: View {
             SplashView()
                 .navigationDestination(for: AppRoute.self) { route in
                     switch route {
+                        
+                    case .onboarding:
+                        OnboardingView()
+                        
+                    case .login:
+                        LoginView(
+                            viewModel: LoginViewModel(
+                                service: AuthServiceImpl(),
+                                coordinator: coordinator
+                            )
+                        )
+                        
+                    case .otp(let input):
+                        OTPView(
+                            viewModel: OTPViewModel(
+                                service: AuthServiceImpl(),
+                                coordinator: coordinator,
+                                appState: AppState()
+                            )
+                        )
+                        
                     case .home:
                         MainTabView()
-                    case .cart:
-                        CartView()
-                    case .checkout:
-                        CheckoutView()
+                        
                     default:
                         EmptyView()
                     }
@@ -31,4 +49,5 @@ struct RootView: View {
 
 #Preview {
     RootView()
+        .environmentObject(AppCoordinator())
 }

@@ -8,11 +8,35 @@
 import SwiftUI
 
 struct OTPView: View {
+    @StateObject var viewModel: OTPViewModel
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            TextField("Enter OTP", text: $viewModel.code)
+            
+            Button("Verify") {
+                Task { await viewModel.verifyOTP() }
+            }
+            
+            content
+        }
+    }
+    
+    @ViewBuilder
+    var content: some View {
+        switch viewModel.state {
+            
+        case .loading:
+            ProgressView()
+            
+        case .error(let msg):
+            Text(msg).foregroundColor(.red)
+            
+        default:
+            EmptyView()
+        }
     }
 }
-
 #Preview {
-    OTPView()
+    OTPView(viewModel: OTPViewModel(service: AuthServiceImpl(), coordinator: AppCoordinator(), appState: AppState()))
 }
