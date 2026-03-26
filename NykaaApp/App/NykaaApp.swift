@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct NykaaAppApp: App {
+struct NykaaApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
