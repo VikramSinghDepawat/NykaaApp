@@ -13,6 +13,10 @@ struct OTPView: View {
     var body: some View {
         VStack {
             TextField("Enter OTP", text: $viewModel.code)
+                .textFieldStyle(.roundedBorder)
+                .padding(.bottom, 20)
+                .keyboardType(.numberPad)
+                .autocapitalization(.none)
             
             Button("Verify") {
                 Task { await viewModel.verifyOTP() }
@@ -20,6 +24,7 @@ struct OTPView: View {
             
             content
         }
+        .padding()
     }
     
     @ViewBuilder

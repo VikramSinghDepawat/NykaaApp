@@ -44,7 +44,8 @@ struct AuthFlowView: View {
                     handleAuthRoute(authRoute)
                 case .main(let route):
                     switch route {
-                        
+                    case .home, .cart, .checkout:
+                         MainTabView()
                     case .productDetail(let product):
                         ProductDetailView(
                             viewModel: ProductDetailViewModel(
@@ -53,9 +54,6 @@ struct AuthFlowView: View {
                                 wishlist: wishlist
                             )
                         )
-                        
-                    default:
-                        EmptyView()
                     }
                 }
             }
