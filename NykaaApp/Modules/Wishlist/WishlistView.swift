@@ -8,11 +8,38 @@
 import SwiftUI
 
 struct WishlistView: View {
+    
+    @StateObject var viewModel: WishlistViewModel
+    
     var body: some View {
-        Text("Wishlist screen")
+        content
+    }
+    
+    @ViewBuilder
+    private var content: some View {
+        switch viewModel.state {
+            
+        case .success(let items):
+            if items.isEmpty {
+                Text("No items in wishlist ❤️")
+            } else {
+                List(items) { product in
+                    Text(product.title)
+                }
+            }
+            
+        case .loading:
+            ProgressView()
+            
+        case .error(let msg):
+            Text(msg)
+            
+        default:
+            EmptyView()
+        }
     }
 }
 
 #Preview {
-    WishlistView()
+    WishlistView(viewModel: WishlistViewModel(wishlist: WishlistManager()))
 }

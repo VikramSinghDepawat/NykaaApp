@@ -8,7 +8,13 @@
 import SwiftUI
 import Combine
 
+enum AuthState {
+    case unknown
+    case unauthenticated
+    case authenticated
+}
+
 final class AppState: ObservableObject {
-    @Published var isLoggedIn: Bool = false
+    @Published var authState: AuthState = .unknown
     @Published var hasSeenOnboarding: Bool = false
 }

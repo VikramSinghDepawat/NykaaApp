@@ -8,15 +8,14 @@
 import SwiftUI
 
 struct OnboardingView: View {
-    @EnvironmentObject private var coordinator: AppCoordinator
     @EnvironmentObject private var appState: AppState
     
     var body: some View {
         VStack {
-            Text("Wellcome to Nykaa Fashion")
+            Text("Welcome to Nykaa Fashion.")
             Button("Get Started") {
-                appState.hasSeenOnboarding.toggle()
-                coordinator.push(.login)
+                appState.hasSeenOnboarding = true
+                appState.authState = .unauthenticated
             }
         }
     }

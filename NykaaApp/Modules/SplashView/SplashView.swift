@@ -9,21 +9,18 @@ import SwiftUI
 
 struct SplashView: View {
     @EnvironmentObject var appState: AppState
-    @EnvironmentObject var coordinator: AppCoordinator
     
     var body: some View {
         Text("Nykaa")
             .font(.largeTitle)
             .bold()
-            .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                    if !appState.hasSeenOnboarding {
-                        coordinator.push(.onboarding)
-                    } else if !appState.isLoggedIn {
-                        coordinator.push(.login)
-                    } else {
-                        coordinator.push(.home)
-                    }
+            .task {
+                try? await Task.sleep(nanoseconds: 1_500_000_000)
+                
+                if !appState.hasSeenOnboarding {
+                    appState.authState = .unauthenticated
+                } else {
+                    appState.authState = .unauthenticated
                 }
             }
     }

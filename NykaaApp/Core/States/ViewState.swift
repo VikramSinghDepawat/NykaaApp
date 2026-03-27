@@ -13,3 +13,18 @@ enum ViewState<T> {
     case success(T)
     case error(String)
 }
+
+extension ViewState: Equatable where T: Equatable {
+    static func == (lhs: ViewState<T>, rhs: ViewState<T>) -> Bool {
+        switch (lhs, rhs) {
+        case (.idle, .idle), (.loading, .loading):
+            return true
+        case (.success(let l), .success(let r)):
+            return l == r
+        case (.error(let l), .error(let r)):
+            return l == r
+        default:
+            return false
+        }
+    }
+}

@@ -31,9 +31,9 @@ final class OTPViewModel: ObservableObject {
             
             if result {
                 state = .success(true)
-                appState.isLoggedIn = true
+                appState.authState = .authenticated
                 coordinator.reset()
-                coordinator.push(.home)
+                coordinator.push(.main(.home))
             } else {
                 state = .error("Invalid OTP")
             }

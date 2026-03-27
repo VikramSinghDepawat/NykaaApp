@@ -8,11 +8,16 @@
 import SwiftUI
 
 struct CheckoutView: View {
+    @StateObject var vm: CheckoutViewModel
+    
     var body: some View {
-        Text("Welcome to Checkout home screen")
+        VStack {
+            Text("Total: \(vm.total)")
+            Button("Pay Now") {}
+        }
     }
 }
 
 #Preview {
-    CheckoutView()
+    CheckoutView(vm: CheckoutViewModel(cart: CartManager()))
 }

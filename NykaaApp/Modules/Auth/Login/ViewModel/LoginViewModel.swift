@@ -26,7 +26,7 @@ final class LoginViewModel: ObservableObject {
         do {
             try await service.sendOTP(to: input)
             state = .success(())
-            coordinator.push(.otp(input))
+            coordinator.push(.auth(.otp(input)))
         } catch {
             state = .error(error.localizedDescription)
         }

@@ -8,41 +8,77 @@
 import SwiftUI
 
 struct RootView: View {
+    @EnvironmentObject var appState: AppState
+
+    var body: some View {
+        switch appState.authState {
+            
+        case .unknown:
+            SplashView()
+            
+        case .unauthenticated:
+            AuthFlowView()
+            
+        case .authenticated:
+            MainTabView()
+        }
+    }
+}
+
+struct AuthFlowView: View {
     @EnvironmentObject var coordinator: AppCoordinator
+    @EnvironmentObject var cart: CartManager
+    @EnvironmentObject var wishlist: WishlistManager
     
     var body: some View {
         NavigationStack(path: $coordinator.path) {
-            SplashView()
-                .navigationDestination(for: AppRoute.self) { route in
+            LoginView(
+                viewModel: LoginViewModel(
+                    service: AuthServiceImpl(),
+                    coordinator: coordinator
+                )
+            )
+            .navigationDestination(for: AppRoute.self) { route in
+                switch route {
+                case .auth(let authRoute):
+                    handleAuthRoute(authRoute)
+                case .main(let route):
                     switch route {
                         
-                    case .onboarding:
-                        OnboardingView()
-                        
-                    case .login:
-                        LoginView(
-                            viewModel: LoginViewModel(
-                                service: AuthServiceImpl(),
-                                coordinator: coordinator
+                    case .productDetail(let product):
+                        ProductDetailView(
+                            viewModel: ProductDetailViewModel(
+                                product: product,
+                                cart: cart,
+                                wishlist: wishlist
                             )
                         )
-                        
-                    case .otp(let input):
-                        OTPView(
-                            viewModel: OTPViewModel(
-                                service: AuthServiceImpl(),
-                                coordinator: coordinator,
-                                appState: AppState()
-                            )
-                        )
-                        
-                    case .home:
-                        MainTabView()
                         
                     default:
                         EmptyView()
                     }
                 }
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func handleAuthRoute(_ route: AuthRoute) -> some View {
+        switch route {
+        case .onboarding:
+            OnboardingView()
+        case .login:
+            EmptyView()
+        case .registration:
+            Text("Register")
+        case .otp:
+            OTPView(
+                viewModel: OTPViewModel(
+                    service: AuthServiceImpl(),
+                    coordinator: coordinator,
+                    appState: AppState()
+                )
+            )
         }
     }
 }

@@ -8,14 +8,20 @@
 import Foundation
 
 enum AppRoute: Hashable {
-    case splash
+    case auth(AuthRoute)
+    case main(MainRoute)
+}
+
+enum AuthRoute: Hashable {
     case onboarding
     case login
     case registration
     case otp(String)
+}
+
+enum MainRoute: Hashable {
     case home
     case productDetail(Product)
     case cart
     case checkout
 }
-
