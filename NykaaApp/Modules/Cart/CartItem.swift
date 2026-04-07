@@ -7,13 +7,13 @@
 
 import Foundation
 
-struct CartItem: Codable, Identifiable {
-    let id: UUID
+struct CartItem: Codable, Identifiable, Equatable {
+    let id: Int
     let product: Product
     var quantity: Int
     
-    init(id: UUID = UUID(), product: Product, quantity: Int) {
-        self.id = id
+    init(product: Product, quantity: Int) {
+        self.id = product.id
         self.product = product
         self.quantity = quantity
     }

@@ -84,4 +84,5 @@ struct AuthFlowView: View {
 #Preview {
     RootView()
         .environmentObject(AppCoordinator())
+        .environmentObject(AppState())
 }

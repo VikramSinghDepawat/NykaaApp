@@ -42,4 +42,7 @@ struct MainTabView: View {
 
 #Preview {
     MainTabView()
+        .environmentObject(WishlistManager())
+        .environmentObject(CartManager())
+        .environmentObject(AppCoordinator())
 }

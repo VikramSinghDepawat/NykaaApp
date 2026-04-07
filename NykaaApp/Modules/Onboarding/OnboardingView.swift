@@ -13,10 +13,14 @@ struct OnboardingView: View {
     var body: some View {
         VStack {
             Text("Welcome to Nykaa Fashion.")
+                .font(.title2)
+                .bold()
+            
             Button("Get Started") {
                 appState.hasSeenOnboarding = true
                 appState.authState = .unauthenticated
             }
+            .padding()
         }
     }
 }

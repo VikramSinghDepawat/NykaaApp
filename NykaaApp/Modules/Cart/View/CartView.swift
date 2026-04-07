@@ -14,7 +14,6 @@ struct CartView: View {
     var body: some View {
         VStack {
             content
-            checkoutBar
         }
     }
     
@@ -23,35 +22,68 @@ struct CartView: View {
         switch viewModel.state {
         case .success(let items):
             if items.isEmpty {
-                Text("Your cart is empty 🛒")
+                emptyView
             } else {
-                List(items) { item in
-                    cartRow(item)
-                }
+                cartList(items)
+                checkoutBar
             }
-        case .loading: ProgressView()
+        case .loading, .idle: ProgressView()
         case .error(let message): Text(message)
-        default:
-            EmptyView()
         }
     }
     
-    private func cartRow(_ item: CartItem) -> some View {
-        HStack {
-            Text(item.product.title)
-            Spacer()
+    private func deleteItems(at offsets: IndexSet) {
+        guard case let .success(items) = viewModel.state else { return }
+        
+        withAnimation {
+            offsets.map { items[$0] }
+                .forEach { viewModel.remove($0) }
+        }
+    }
+    
+    private var emptyView: some View {
+        VStack(spacing: 12) {
+            Text("Your cart is empty 🛒")
+            Text("Add items to continue shopping")
+                .font(.caption)
+                .foregroundColor(.gray)
+        }
+    }
+    
+    private func cartList(_ items: [CartItem]) -> some View {
+        List {
+            cartRow(items)
+        }
+        .animation(.easeInOut, value: items)
+    }
+    
+    private func cartRow(_ items: [CartItem]) -> some View {
+        ForEach(items, id: \.id) { item in
             HStack {
-                Button("-") {
-                    viewModel.decrease(item.product)
-                }
-                
-                Text("\(item.quantity)")
-                
-                Button("+") {
-                    viewModel.increase(item.product)
+                Text(item.product.title)
+                Spacer()
+                HStack {
+                    Button {
+                        viewModel.decrease(item.id)
+                    } label: {
+                        Image(systemName: "minus.circle")
+                    }
+                    .padding()
+                    
+                    Text("\(item.quantity)")
+                        .padding()
+                    
+                    Button {
+                        viewModel.increase(item.id)
+                    } label: {
+                        Image(systemName: "plus.circle")
+                    }
+                    .padding()
                 }
             }
+            .id(item.id)
         }
+        .onDelete(perform: deleteItems)        
     }
     
     private var checkoutBar: some View {

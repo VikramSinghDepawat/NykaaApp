@@ -18,4 +18,8 @@ final class CheckoutViewModel: ObservableObject {
     var total: Double {
         cart.total
     }
+    
+    func placeOrder() {
+        print("Payment Success ✅")
+    }
 }
